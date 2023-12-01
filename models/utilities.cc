@@ -19,6 +19,10 @@ bool Utilities::ReplaceFirst(std::string &str, const std::string &from, const st
     return true;
 }
 
-void Utilities::ReplaceAll(std::string &str, const std::string& from, const std::string& to) {
-    while (ReplaceFirst(str, from, to));
+int Utilities::ReplaceAll(std::string &str, const std::string& from, const std::string& to) {
+    int count = 0;
+    while (ReplaceFirst(str, from, to)) {
+        ++count;
+    }
+    return count;
 }
