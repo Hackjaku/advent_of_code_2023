@@ -15,15 +15,15 @@ int main() {
 
     for (int i = 0; i < lines.size(); i++) {
 
-        utils.Replace(lines[i], "one", "o1e");
-        utils.Replace(lines[i], "two", "t2o");
-        utils.Replace(lines[i], "three", "t3e");
-        utils.Replace(lines[i], "four", "f4r");
-        utils.Replace(lines[i], "five", "f5e");
-        utils.Replace(lines[i], "six", "s6x");
-        utils.Replace(lines[i], "seven", "s7n");
-        utils.Replace(lines[i], "eight", "e8t");
-        utils.Replace(lines[i], "nine", "n9e");
+        utils.ReplaceAll(lines[i], "one", "o1e");
+        utils.ReplaceAll(lines[i], "two", "t2o");
+        utils.ReplaceAll(lines[i], "three", "t3e");
+        utils.ReplaceAll(lines[i], "four", "f4r");
+        utils.ReplaceAll(lines[i], "five", "f5e");
+        utils.ReplaceAll(lines[i], "six", "s6x");
+        utils.ReplaceAll(lines[i], "seven", "s7n");
+        utils.ReplaceAll(lines[i], "eight", "e8t");
+        utils.ReplaceAll(lines[i], "nine", "n9e");
     }    
 
     string line;
