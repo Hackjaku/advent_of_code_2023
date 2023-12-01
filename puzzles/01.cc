@@ -24,7 +24,7 @@ int main() {
         utils.ReplaceAll(lines[i], "seven", "s7n");
         utils.ReplaceAll(lines[i], "eight", "e8t");
         utils.ReplaceAll(lines[i], "nine", "n9e");
-    }    
+    }
 
     string line;
     int sum = 0;
