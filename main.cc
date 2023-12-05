@@ -14,17 +14,21 @@ private:
     int id;
     std::vector<int> winning_numbers;
     std::vector<int> numbers;
+    int copies;
 
 public:
     Card(std::vector<int> winning_numbers, std::vector<int> numbers, int id) {
         this->winning_numbers = winning_numbers;
         this->numbers = numbers;
         this->id = id;
+        this->copies = 1;
     }
 
     inline std::vector<int> GetWinningNumbers() { return this->winning_numbers; }
     inline std::vector<int> GetNumbers() { return this->numbers; }
     inline int GetId() { return this->id; }
+    inline int GetCopies() { return this->copies; }
+    inline void AddCopies(int copies) { this->copies += copies; }
 };
 
 int main() {
@@ -80,7 +84,7 @@ int main() {
     // for each card, check how many winning numbers it has
     int sum = 0;
     int j = 0;
-    do {
+    for (int j = 0; j < cards.size(); ++j) {
         int count = 0;
         for (auto number : cards[j].GetNumbers()) {
             for (int i = 0; i < cards[j].GetWinningNumbers().size(); i++) {
@@ -91,13 +95,16 @@ int main() {
             }
         }
 
-        for (int i = 0; i <= count; ++i) {
-            cards.insert(cards.begin() + j + 1 + 2 * i, cards[j + 1 + 2 * i]);
+        for (int i = 1; i <= count; ++i) {
+            cards[j+i].AddCopies(cards[j].GetCopies());
         }
-        ++j;
-    } while (j < cards.size());
+    }
 
-    std::cout << cards.size() << std::endl;
+    for (auto card : cards) {
+        sum += card.GetCopies();
+    }
+
+    std::cout << sum << std::endl;
 
     return 0;
 }
