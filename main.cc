@@ -1,95 +1,26 @@
-#include <chrono>
-#include <fstream>
 #include <iostream>
-#include <set>
-#include <sstream>
-#include <string>
+#include <cmath>
 
-void solve(int part)
-{
-    std::set<std::pair<long, long>> cur, keep, next; // Sets of ranges in the form (start, len)
-    std::ifstream f("../inputs/05.txt");
-    if (!f.is_open())
-    {
-        return;
-    }
-    // Parse the seeds, depending on the input
-    std::string line;
-    std::getline(f, line);
-    std::istringstream line_stream(line);
-    std::string seed_start, seed_len;
-    std::getline(line_stream, seed_start, ' '); // Throw away "seeds: " from first line
-    while (std::getline(line_stream, seed_start, ' '))
-    {
-        if (part == 1) // In part 1, treat the seeds like seed ranges of length 1
-        {
-            cur.insert({std::stol(seed_start), 1});
-        }
-        else // In part 2, use the seed value pairs
-        {
-            std::getline(line_stream, seed_len, ' ');
-            cur.insert({std::stol(seed_start), std::stol(seed_len)});
-        }
-    }
-    // Parse and apply the piping lines
-    while (std::getline(f, line))
-    {
-        if (line.empty()) // If the line is empty, prepare to start the next map
-        {
-            cur.insert(next.begin(), next.end());
-            next.clear();
-            std::getline(f, line); // Throw away "X-to-Y map:\n"
-            continue;
-        }
-        long pipe_dest, pipe_start, pipe_len;
-        line_stream.clear(); // Necessary to reuse line_stream
-        line_stream.str(line);
-        line_stream >> pipe_dest >> pipe_start >> pipe_len;
-        // Handle the current ranges, piping and splitting if necessary
-        for (auto [range_start, range_len] : cur)
-        {
-            // Find the lower and upper positions of the intersection between this
-            // range and the pipe
-            long lower = std::max(range_start, pipe_start);
-            long upper = std::min(range_start + range_len, pipe_start + pipe_len);
-            if (upper > lower)
-            {
-                // Push the part of the range in the pipe through the pipe
-                next.insert({pipe_dest - pipe_start + lower, upper - lower});
-                // Keep the upper/lower portions of the range if not in pipe
-                if (range_start + range_len > pipe_start + pipe_len)
-                {
-                    keep.insert({pipe_start + pipe_len, range_start + range_len - pipe_start - pipe_len});
-                }
-                if (range_start < pipe_start)
-                {
-                    keep.insert({range_start, pipe_start - range_start});
-                }
-            }
-            else // The range and pipe do not overlap, so keep the whole range
-            {
-                keep.insert({range_start, range_len});
-            }
-        }
-        cur.swap(keep);
-        keep.clear();
-    }
-    cur.insert(next.begin(), next.end()); // Include outputs from final iteration
-    f.close();
-    // Output the start of the "lowest" range (using the fact that cur is sorted)
-    std::cout << "Part " << part << ": " << cur.begin()->first << std::endl;
-}
+#include "./models/utilities.h"
 
-int main()
-{
-    auto start = std::chrono::high_resolution_clock::now();
+int main() {
+    Utilities utils;
+    std::vector<std::string> lines = utils.ParseInput("../inputs/06.txt");
+    
+    // distance = time_pressed * (race_total_time - time_pressed)
+    // distance = record
+    // use the inequality to find the interval of time_pressed that will beat the records
 
-    solve(1);
-    solve(2);
+    double rt, r; // race total time, distance record
 
-    auto end = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
-    std::cout << "Clock time: " << duration.count() << " us" << std::endl;
+    double lower_bound, upper_bound;
+
+    std::cin >> rt >> r;
+
+    lower_bound = std::ceil(rt - std::sqrt(rt * rt - 4 * r)) / 2;
+    upper_bound = std::floor(rt + std::sqrt(rt * rt - 4 * r)) / 2;
+
+    std::cout << "Winning range size: " << upper_bound - lower_bound  + 1 << std::endl;
 
     return 0;
 }
