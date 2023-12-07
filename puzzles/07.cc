@@ -5,7 +5,7 @@
 #include <algorithm>
 #include <boost/algorithm/string.hpp>
 
-#include "./models/utilities.h"
+#include "../models/utilities.h"
 
 class Hand {
 // A hand of cards
