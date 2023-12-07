@@ -122,11 +122,6 @@ void Hand::calculate_rank(bool joker) {
 }
 
 void Hand::calculate_rank_joker() {
-
-    if (this->cards_str == "JA6A3") {
-        std::cout << "JA6A3" << std::endl;
-    }
-
     // copy the cards
     std::vector<int> cards;
 

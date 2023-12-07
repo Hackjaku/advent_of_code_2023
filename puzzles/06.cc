@@ -1,11 +1,7 @@
 #include <iostream>
 #include <cmath>
 
-#include "../models/utilities.h"
-
 int main() {
-    Utilities utils;
-    std::vector<std::string> lines = utils.ParseInput("../inputs/06.txt");
     
     // distance = time_pressed * (race_total_time - time_pressed)
     // distance = record
