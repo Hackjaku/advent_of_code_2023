@@ -39,3 +39,11 @@ std::vector<std::string> Utilities::Split(std::string str, std::string delimiter
     parts.push_back(str);
     return parts;
 }
+
+long Utilities::LeastCommonMultiple(std::vector<long> numbers) {
+    long result = numbers[0];
+    for (int i = 1; i < numbers.size(); ++i) {
+        result = boost::integer::lcm(result, numbers[i]);
+    }
+    return result;
+}
