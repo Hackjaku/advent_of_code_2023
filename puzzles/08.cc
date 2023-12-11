@@ -5,7 +5,6 @@
 #include <map>
 #include <algorithm>
 #include <boost/algorithm/string.hpp>
-#include <boost/integer/common_factor.hpp>
 
 #include "./models/utilities.h"
 
@@ -108,31 +107,31 @@ int main() {
         map[nodeName]->SetRightNode(map[rightNodeName]);
     }
 
-    // // follow directions
-    // MapNode* currentNode = map["AAA"];
-    // int i = 0;
-    // int steps = 0;
+    // follow directions
+    MapNode* currentNode = map["AAA"];
+    long i = 0;
+    long steps = 0;
 
-    // while (currentNode != map["ZZZ"]) {
-    //     // if i is higher than the length of the directions, we have reached the end of the directions
-    //     // reset i to 0
-    //     if (i >= directionsString.length()) {
-    //         i = 0;
-    //     }
+    while (currentNode != map["ZZZ"]) {
+        // if i is higher than the length of the directions, we have reached the end of the directions
+        // reset i to 0
+        if (i >= directionsString.length()) {
+            i = 0;
+        }
 
-    //     // get the current direction
-    //     std::string direction = directionsString.substr(i, 1);
-    //     if (direction == "L") {
-    //         currentNode = currentNode->GetLeftNode();
-    //     } else if (direction == "R") {
-    //         currentNode = currentNode->GetRightNode();
-    //     }
+        // get the current direction
+        std::string direction = directionsString.substr(i, 1);
+        if (direction == "L") {
+            currentNode = currentNode->GetLeftNode();
+        } else if (direction == "R") {
+            currentNode = currentNode->GetRightNode();
+        }
 
-    //     ++i;
-    //     ++steps;
-    // }
+        ++i;
+        ++steps;
+    }
 
-    // std::cout << "Part 1: " << steps << std::endl;
+    std::cout << "Part 1: " << steps << std::endl;
 
 
     std::vector<MapNode*> currentNodes;
@@ -149,8 +148,8 @@ int main() {
         }
     }
 
-    int i = 0;
-    long steps = 0;
+    i = 0;
+    steps = 0;
 
     std::vector<long> stepsTaken;
 
@@ -184,7 +183,7 @@ int main() {
         stepsTaken.push_back(steps);
     }
 
-    std::cout << "Part 2: " << least_common_multiple(stepsTaken) << std::endl;
+    std::cout << "Part 2: " << utils.LeastCommonMultiple(stepsTaken) << std::endl;
 
     return 0;
 }
