@@ -5,6 +5,8 @@
 #include <map>
 #include <algorithm>
 #include <boost/algorithm/string.hpp>
+#include <chrono>
+
 
 #include "./models/utilities.h"
 
@@ -27,6 +29,9 @@ long least_common_multiple(std::vector<long> numbers);
 
 
 int main() {
+
+    auto start = std::chrono::high_resolution_clock::now();
+
     Utilities utils;
     std::vector<std::string> lines = utils.ParseInput("../inputs/08.txt");
 
@@ -184,6 +189,10 @@ int main() {
     }
 
     std::cout << "Part 2: " << utils.LeastCommonMultiple(stepsTaken) << std::endl;
+
+    auto end = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+    std::cout << "Clock time: " << duration.count() << " us" << std::endl;
 
     return 0;
 }
