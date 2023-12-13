@@ -47,3 +47,16 @@ long Utilities::LeastCommonMultiple(std::vector<long> numbers) {
     }
     return result;
 }
+
+bool Utilities::AreMatchingColumns(const std::vector<std::string> &pattern, int col1, int col2) {
+    for (int i = 0; i < pattern.size(); ++i) {
+        if (pattern[i][col1] != pattern[i][col2]) {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool Utilities::AreMatchingRows(const std::vector<std::string> &pattern, int row1, int row2) {
+    return pattern[row1] == pattern[row2];
+}

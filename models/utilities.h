@@ -15,6 +15,8 @@ public:
     int ReplaceAll(std::string &str, const std::string& from, const std::string& to);
     std::vector<std::string> Split(std::string, std::string);
     long LeastCommonMultiple(std::vector<long>);
+    bool AreMatchingRows(const std::vector<std::string> &, int, int);
+    bool AreMatchingColumns(const std::vector<std::string> &, int, int);
 };
 
 #endif // UTILITIES_H
