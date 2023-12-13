@@ -7,10 +7,8 @@
 
 #include "models/utilities.h"
 
-
 int main() {
-    Utilities utils;
-    std::vector<std::string> lines = utils.ParseInput("../inputs/13.txt");
+    std::vector<std::string> lines = Utilities::ParseInput("../inputs/13.txt");
 
     for (int i = 0; i < lines.size(); ++i) {
 
@@ -23,6 +21,9 @@ int main() {
         }
 
         // do stuff...
+
+        int mirror_column = FindMirrorColumn(pattern);
+        std::cout << "Mirror column: " << mirror_column << std::endl;
 
         // ? end
         pattern.clear();
