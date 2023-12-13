@@ -17,6 +17,8 @@ public:
     static long LeastCommonMultiple(std::vector<long>);
     static bool AreMatchingRows(const std::vector<std::string> &, int, int);
     static bool AreMatchingColumns(const std::vector<std::string> &, int, int);
+    static int AreDifferentRows(const std::vector<std::string> &, int, int);
+    static int AreDifferentColumns(const std::vector<std::string> &, int, int);
 };
 
 #endif // UTILITIES_H
