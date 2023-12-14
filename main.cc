@@ -8,165 +8,134 @@
 
 #include "models/utilities.h"
 
-bool IsFixableMirroredColumn(const std::vector<std::string> &pattern, int mirror_column, int test_column, bool &fixed) {
-    short distance = std::abs(mirror_column - test_column);
-
-    if (test_column < 0 || test_column + ((distance * 2) - 1) >= pattern[0].size()) {
-        return true;
-    } else {
-        int differences = Utilities::AreDifferentColumns(pattern, test_column, test_column + ((distance * 2) - 1));
-        if (differences == 1) {
-            fixed = true;
-            return IsFixableMirroredColumn(pattern, mirror_column, test_column - 1, fixed);
-        } else if (differences == 0) {
-            return IsFixableMirroredColumn(pattern, mirror_column, test_column - 1, fixed);
-        } else {
-            return false;
-        }
+void MoveUp(std::vector<std::string> &map, const int &row) {
+    // move the round boulders up one place
+    if (row == 0) {
+        throw std::invalid_argument("Cannot move up the top row");
     }
 
-}
-
-bool IsMirrorColumn(const std::vector<std::string> &pattern, int mirror_column, int test_column) {
-    short distance = std::abs(mirror_column - test_column);
-
-    if (test_column < 0 || test_column + ((distance * 2) - 1) >= pattern[0].size()) {
-        return true;
-    } else {
-        return IsMirrorColumn(pattern, mirror_column, test_column - 1) &&
-            Utilities::AreMatchingColumns(pattern, test_column, test_column + ((distance * 2) - 1));
-    }
-}
-
-bool IsFixableMirroredRow(const std::vector<std::string> &pattern, int mirror_row, int test_row, bool &fixed) {
-    short distance = std::abs(mirror_row - test_row);
-
-    if (test_row < 0 || test_row + ((distance * 2) - 1) >= pattern.size()) {
-        return true;
-    } else {
-        int differences = Utilities::AreDifferentRows(pattern, test_row, test_row + ((distance * 2) - 1));
-        if (differences == 1) {
-            fixed = true;
-            return IsFixableMirroredRow(pattern, mirror_row, test_row - 1, fixed);
-        } else if (differences == 0) {
-            return IsFixableMirroredRow(pattern, mirror_row, test_row - 1, fixed);
-        } else {
-            return false;
+    for (int i = 0; i < map[row].size(); ++i) {
+        if (map[row][i] == 'O' && map[row - 1][i] == '.') {
+            map[row][i] = '.';
+            map[row - 1][i] = 'O';
         }
     }
 }
 
-bool IsMirrorRow(const std::vector<std::string> &pattern, int mirror_row, int test_row) {
-    short distance = std::abs(mirror_row - test_row);
-
-    if (test_row < 0 || test_row + ((distance * 2) - 1) >= pattern.size()) {
-        return true;
-    } else {
-        return IsMirrorRow(pattern, mirror_row, test_row - 1) &&
-            Utilities::AreMatchingRows(pattern, test_row, test_row + ((distance * 2) - 1));
+void MoveDown(std::vector<std::string> &map, const int &row) {
+    // move the round boulders down one place
+    if (row == map.size() - 1) {
+        throw std::invalid_argument("Cannot move down the bottom row");
     }
-}
 
-int FindMirrorRow(const std::vector<std::string> &pattern) {
-    for (int i = 1; i < pattern.size(); ++i) {
-        if (IsMirrorRow(pattern, i, i - 1)) {
-            return i;
+    for (int i = 0; i < map[row].size(); ++i) {
+        if (map[row][i] == 'O' && map[row + 1][i] == '.') {
+            map[row][i] = '.';
+            map[row + 1][i] = 'O';
         }
     }
-    return -1;
 }
 
-int FindMirrorColumn(const std::vector<std::string> &pattern) {
-    for (int i = 1; i < pattern[0].size(); ++i) {
-        if (IsMirrorColumn(pattern, i, i - 1)) {
-            return i;
+void MoveLeft(std::vector<std::string> &map, const int &col) {
+    // move the round boulders left one place
+    if (col == 0) {
+        throw std::invalid_argument("Cannot move left the leftmost column");
+    }
+
+    for (int i = 0; i < map.size(); ++i) {
+        if (map[i][col] == 'O' && map[i][col - 1] == '.') {
+            map[i][col] = '.';
+            map[i][col - 1] = 'O';
         }
     }
-    return -1;
 }
 
-int FindFixableMirrorRow(const std::vector<std::string> &pattern) {
-    for (int i = 1; i < pattern.size(); ++i) {
-        bool fixed = false;
-        if (IsFixableMirroredRow(pattern, i, i - 1, fixed)) {
-            if (fixed) {
-                return i;
+void MoveRight(std::vector<std::string> &map, const int &col) {
+    // move the round boulders right one place
+    if (col == map[0].size() - 1) {
+        throw std::invalid_argument("Cannot move right the rightmost column");
+    }
+
+    for (int i = 0; i < map.size(); ++i) {
+        if (map[i][col] == 'O' && map[i][col + 1] == '.') {
+            map[i][col] = '.';
+            map[i][col + 1] = 'O';
+        }
+    }
+}
+
+void TiltEast(std::vector<std::string> &map) {
+    for (int i = map[0].size() - 2; i >= 0; --i) {
+        for (int j = i; j <= map[i].size() - 2; ++j) {
+            MoveRight(map, j);
+        }
+    }
+}
+
+void TiltWest(std::vector<std::string> &map) {
+    for (int i = 1; i < map[0].size(); ++i) {
+        for (int j = i; j > 0; --j) {
+            MoveLeft(map, j);
+        }
+    }
+}
+
+void TiltSouth(std::vector<std::string> &map) {
+    for (int i = map.size() - 2; i >= 0; --i) {
+        for (int j = i; j <= map[i].size() - 2; ++j) {
+            MoveDown(map, j);
+        }
+    }
+}
+
+void TiltNorth(std::vector<std::string> &map) {
+    for (int i = 1; i < map.size(); ++i) {
+        for (int j = i; j > 0; --j) {
+            MoveUp(map, j);
+        }
+    }
+}
+
+int CalculateNorthWeight(const std::vector<std::string> &map) {
+    int weight = 0;
+
+    for (int i = 0; i < map.size(); ++i) {
+        for (int j = 0; j < map[i].size(); ++j) {
+            if (map[i][j] == 'O') {
+                // distance from south
+                weight += std::abs((int)i - (int)(map.size()));
             }
         }
     }
-    return -1;
+
+    return weight;
 }
 
-int FindFixableMirrorColumn(const std::vector<std::string> &pattern) {
-    for (int i = 1; i < pattern[0].size(); ++i) {
-        bool fixed = false;
-        if (IsFixableMirroredColumn(pattern, i, i - 1, fixed)) {
-            if (fixed) {
-                return i;
-            }
-        }
+void PrintMap(const std::vector<std::string> &map) {
+    for (int i = 0; i < map.size(); ++i) {
+        std::cout << map[i] << std::endl;
     }
-    return -1;
 }
 
 int main() {
 
     auto start = std::chrono::high_resolution_clock::now();
 
+    std::vector<std::string> lines = Utilities::ParseInput("../inputs/14.txt");
 
-    std::vector<std::string> lines = Utilities::ParseInput("../inputs/13.txt");
+    for (int i = 0; i < 3; ++i) {
+        TiltNorth(lines);
+        TiltWest(lines);
+        TiltSouth(lines);
+        TiltEast(lines);
 
-    int sum = 0;
-    int sum2 = 0;
+        PrintMap(lines);
 
-    for (int i = 0; i < lines.size(); ++i) {
-
-        std::vector<std::string> pattern;
-
-        // while lines[i] is not empty
-        while (lines[i].size() > 0) {
-            pattern.push_back(lines[i]);
-            ++i;
-        }
-
-        // do stuff...
-
-        // ! ---- PART 1 ----
-        int mirror = FindMirrorColumn(pattern);
-        if (mirror != -1) {
-            sum += mirror;
-        } else {
-            mirror = FindMirrorRow(pattern);
-            if (mirror != -1) {
-                sum += 100 * mirror;
-            } else {
-                std::cout << "No mirror found" << std::endl;
-            }
-        }
-        // ! ---- PART 1 END ----
-
-
-
-        // ! ---- PART 2 ----
-
-        int fixable_mirror = FindFixableMirrorRow(pattern);
-        if (fixable_mirror != -1) {
-            sum2 += 100 * fixable_mirror;
-        } else {
-            fixable_mirror = FindFixableMirrorColumn(pattern);
-            if (fixable_mirror != -1) {
-                sum2 += fixable_mirror;
-            } else {
-                std::cout << "No fixable mirror found" << std::endl;
-            }
-        }
-        // ! ---- PART 2 END ----
-
-        pattern.clear();
+        std::cout << std::endl;
     }
 
-    std::cout << "Part 1: " << sum << std::endl;
-    std::cout << "Part 2: " << sum2 << std::endl;
+
+    std::cout << std::endl << "Part 1: " << CalculateNorthWeight(lines) << std::endl << std::endl;
 
     auto end = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
