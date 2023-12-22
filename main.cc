@@ -12,11 +12,12 @@
 struct Module {
     bool outSignal;
     virtual void Execute();
+    std::vector<std::string> inputs;
+    std::vector<std::string> outputs;
 };
 
 struct FlipFlop : public Module {
-
-}
+};
 
 int main() {
 
